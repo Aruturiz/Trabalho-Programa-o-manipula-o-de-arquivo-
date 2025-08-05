@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <iomanip> // para std::setprecision
+#include <iomanip> 
 
 using namespace std;
 
@@ -18,13 +18,43 @@ string codigodisciplinas[disciplinasmaximo];
 int totaldisci = 0;
 
 float notas[alunosmaximo][disciplinasmaximo] = {0};
+
+void carregarAlunos() {
+    ifstream arquivo("alunos.txt");
+    totalAlunos = 0;
+    while (arquivo >> matriculas[totalAlunos]) {
+        arquivo.ignore();
+        getline(arquivo, nomealunos[totalAlunos], ';');
+        getline(arquivo, turmas[totalAlunos]);
+        totalAlunos++;
+    }
+    arquivo.close();
+}
+
+void cadastrarAluno() {
+    string nome, matricula, turma;
+    cout << "Nome: ";
+    cin.ignore();
+    getline(cin, nome);
+    cout << "Matrícula: ";
+    cin >> matricula;
+    cout << "Turma: ";
+    cin >> turma;
+
+    ofstream arquivo("alunos.txt", ios::app);
+    arquivo << matricula << " " << nome << ";" << turma << endl;
+    arquivo.close();
+
+    cout << "Aluno cadastrado com sucesso!" << endl;
+}
+
 void menu() {
     carregarAlunos();
     carregarDisciplinas();
 
     int opcao;
     do {
-        cout << "\n===== MENU =====\n";
+        cout << "MENU" << endl;
         cout << "1. Cadastrar Aluno\n";
         cout << "2. Cadastrar Disciplina\n";
         cout << "3. Lançar Nota\n";
