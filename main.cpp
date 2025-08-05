@@ -1,0 +1,34 @@
+void menu() {
+    carregarAlunos();
+    carregarDisciplinas();
+
+    int opcao;
+    do {
+        cout << "\n===== MENU =====\n";
+        cout << "1. Cadastrar Aluno\n";
+        cout << "2. Cadastrar Disciplina\n";
+        cout << "3. Lançar Nota\n";
+        cout << "4. Consultar Notas do Aluno\n";
+        cout << "5. Outras Consultas de Notas\n";
+        cout << "6. Relatórios Gerais\n";
+        cout << "0. Sair\n";
+        cout << "Escolha uma opção: ";
+        cin >> opcao;
+
+        switch (opcao) {
+            case 1: cadastrarAluno(); break;
+            case 2: cadastrarDisciplina(); break;
+            case 3: lancarNota(); break;
+            case 4: consultarNotasAluno(); break;
+            case 5: consultarNotas(); break;
+            case 6: gerarRelatorio(); break;
+            case 0: cout << "Encerrando...\n"; break;
+            default: cout << "Opção inválida!\n"; break;
+        }
+    } while (opcao != 0);
+}
+
+int main() {
+    menu();
+    return 0;
+}
