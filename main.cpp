@@ -1,3 +1,23 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <iomanip> // para std::setprecision
+
+using namespace std;
+
+const int alunosmaximo = 100;
+const int disciplinasmaximo = 10;
+
+string nomealunos[alunosmaximo];
+string matriculas[alunosmaximo];
+string turmas[alunosmaximo];
+int totalAlunos = 0;
+
+string nomedisciplinas[disciplinasmaximo];
+string codigodisciplinas[disciplinasmaximo];
+int totaldisci = 0;
+
+float notas[alunosmaximo][disciplinasmaximo] = {0};
 void menu() {
     carregarAlunos();
     carregarDisciplinas();
