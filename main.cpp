@@ -30,6 +30,15 @@ void carregarAlunos() {
     }
     arquivo.close();
 }
+void carregarDisciplinas() {
+    ifstream arquivo("disciplinas.txt");
+    totaldisci = 0;
+    while (getline(arquivo, codigodisciplinas[totaldisci], ';')) {
+        getline(arquivo, nomedisciplinas[totaldisci]);
+        totaldisci++;
+    }
+    arquivo.close();
+}
 
 void cadastrarAluno() {
     string nome, matricula, turma;
@@ -92,17 +101,6 @@ void lancarNota() {
     arquivo.close();
 
     cout << "Nota lançada com sucesso!" << endl;
-}
-
-
-void carregarDisciplinas() {
-    ifstream arquivo("disciplinas.txt");
-    totaldisci = 0;
-    while (getline(arquivo, codigodisciplinas[totaldisci], ';')) {
-        getline(arquivo, nomedisciplinas[totaldisci]);
-        totaldisci++;
-    }
-    arquivo.close();
 }
 
 void cadastrarDisciplina() {
