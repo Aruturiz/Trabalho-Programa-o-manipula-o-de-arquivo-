@@ -47,6 +47,30 @@ void cadastrarAluno() {
 
     cout << "Aluno cadastrado com sucesso!" << endl;
 }
+void carregarDisciplinas() {
+    ifstream arquivo("disciplinas.txt");
+    totaldisci = 0;
+    while (getline(arquivo, codigodisciplinas[totaldisci], ';')) {
+        getline(arquivo, nomedisciplinas[totaldisci]);
+        totaldisci++;
+    }
+    arquivo.close();
+}
+
+void cadastrarDisciplina() {
+    string codigo, nome;
+    cout << "Código da disciplina: ";
+    cin >> codigo;
+    cout << "Nome da disciplina: ";
+    cin.ignore();
+    getline(cin, nome);
+
+    ofstream arquivo("disciplinas.txt", ios::app);
+    arquivo << codigo << ";" << nome << endl;
+    arquivo.close();
+
+    cout << "Disciplina cadastrada com sucesso!" << endl;
+}
 
 void menu() {
     carregarAlunos();
