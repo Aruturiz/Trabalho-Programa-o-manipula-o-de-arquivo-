@@ -181,14 +181,36 @@ void consultarNotasPorDisciplina() {
 }
 
 
+
+
+void consultarNotas() {
+    int escolha;
+    cout << "1. Notas de um aluno específico"<<endl;
+    cout << "2. Notas de todos os alunos em uma disciplina"<<endl;
+    cout << "Escolha: ";
+    cin >> escolha;
+
+    switch (escolha) {
+        case 1: consultarNotasAluno();  break;
+        case 2: consultarNotasPorDisciplina(); break;
+        default: cout << "Opção inválida."<<endl; break;
+    }
+}
+
 void gerarRelatorio() {
     cout << fixed << setprecision(2);
     cout << "RELATÓRIO DE MÉDIAS\n" << endl;
 
-    for (int i = 0; i < alunosmaximo; i++)
-        for (int j = 0; j < disciplinasmaximo; j++)
+    // Zera as matrizes
+    for (int i = 0; i < alunosmaximo; i++) {
+        for (int j = 0; j < disciplinasmaximo; j++) {
             notas[i][j] = 0;
-a
+        }
+    }
+
+    float somaNotas[alunosmaximo][disciplinasmaximo] = {0};
+    int contNotas[alunosmaximo][disciplinasmaximo] = {0};
+
     float somaNotasDisciplina[disciplinasmaximo] = {0};
     int contNotasDisciplina[disciplinasmaximo] = {0};
 
@@ -211,32 +233,39 @@ a
             if (codigodisciplinas[j] == cod) id = j;
 
         if (ia != -1 && id != -1) {
-            notas[ia][id] = nota;
+            somaNotas[ia][id] += nota;
+            contNotas[ia][id]++;
+
             somaNotasDisciplina[id] += nota;
             contNotasDisciplina[id]++;
         }
     }
     arquivo.close();
 
+    
     for (int i = 0; i < totalAlunos; i++) {
         cout << "Aluno: " << nomealunos[i] << " (" << matriculas[i] << ")" << endl;
 
-        float somaNotasAluno = 0;
-        int contNotasAluno = 0;
+        float somaMediasAluno = 0;
+        int disciplinasComNota = 0;
 
         for (int j = 0; j < totaldisci; j++) {
             cout << " - " << nomedisciplinas[j] << " (" << codigodisciplinas[j] << "): ";
-            if (notas[i][j] > 0) {
-                cout << notas[i][j] << endl;
-                somaNotasAluno += notas[i][j];  
-                contNotasAluno++;
+
+            if (contNotas[i][j] > 0) { 
+                float mediaDisciplina = somaNotas[i][j] / contNotas[i][j];
+                notas[i][j] = mediaDisciplina;
+                cout << mediaDisciplina << endl;
+
+                somaMediasAluno += mediaDisciplina;
+                disciplinasComNota++;
             } else {
                 cout << "Sem nota" << endl;
             }
         }
 
-        if (contNotasAluno > 0) {
-            float mediaGeral = somaNotasAluno / contNotasAluno;
+        if (disciplinasComNota > 0) {
+            float mediaGeral = somaMediasAluno / disciplinasComNota;
             cout << "Média geral do aluno: " << mediaGeral << endl;
         } else {
             cout << "Média geral do aluno: Sem notas lançadas" << endl;
@@ -245,6 +274,7 @@ a
         cout << endl;
     }
 
+  
     cout << "MÉDIAS GERAIS POR DISCIPLINA" << endl;
     for (int j = 0; j < totaldisci; j++) {
         cout << nomedisciplinas[j] << " (" << codigodisciplinas[j] << "): ";
@@ -252,21 +282,6 @@ a
             cout << somaNotasDisciplina[j] / contNotasDisciplina[j] << endl;
         else
             cout << "Sem notas lançadas" << endl;
-    }
-}
-
-
-void consultarNotas() {
-    int escolha;
-    cout << "1. Notas de um aluno específico"<<endl;
-    cout << "2. Notas de todos os alunos em uma disciplina"<<endl;
-    cout << "Escolha: ";
-    cin >> escolha;
-
-    switch (escolha) {
-        case 1: consultarNotasAluno();  break;
-        case 2: consultarNotasPorDisciplina(); break;
-        default: cout << "Opção inválida."<<endl; break;
     }
 }
 
