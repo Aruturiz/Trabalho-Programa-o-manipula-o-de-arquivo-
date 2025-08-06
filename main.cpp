@@ -184,11 +184,13 @@ void consultarNotasPorDisciplina() {
 
 void gerarRelatorio() {
     cout << fixed << setprecision(2);
-    cout << "RELATÓRIO GERAL DE NOTAS"<<endl;
+    cout << "RELATÓRIO DE MÉDIAS\n" << endl;
 
-    float mediasAlunos[alunosmaximo] = {0};
-    float mediasDisciplinas[disciplinasmaximo] = {0};
-    int contNotasAluno[alunosmaximo] = {0};
+    for (int i = 0; i < alunosmaximo; i++)
+        for (int j = 0; j < disciplinasmaximo; j++)
+            notas[i][j] = 0;
+
+    float somaNotasDisciplina[disciplinasmaximo] = {0};
     int contNotasDisciplina[disciplinasmaximo] = {0};
 
     ifstream arquivo("notas.txt");
@@ -211,32 +213,31 @@ void gerarRelatorio() {
 
         if (ia != -1 && id != -1) {
             notas[ia][id] = nota;
-            mediasAlunos[ia] += nota;
-            contNotasAluno[ia]++;
-            mediasDisciplinas[id] += nota;
+            somaNotasDisciplina[id] += nota;
             contNotasDisciplina[id]++;
         }
     }
     arquivo.close();
 
-    
-    cout << "Médias por Aluno";
     for (int i = 0; i < totalAlunos; i++) {
-        cout << nomealunos[i] << " (" << matriculas[i] << ") - Média: ";
-        if (contNotasAluno[i] > 0)
-            cout << mediasAlunos[i] / contNotasAluno[i] << endl;
-        else
-            cout << "Sem notas" << endl;
+        cout << "Aluno: " << nomealunos[i] << " (" << matriculas[i] << ")" << endl;
+        for (int j = 0; j < totaldisci; j++) {
+            cout << " - " << nomedisciplinas[j] << " (" << codigodisciplinas[j] << "): ";
+            if (notas[i][j] > 0)
+                cout << notas[i][j] << endl;
+            else
+                cout << "Sem nota" << endl;
+        }
+        cout << endl;
     }
 
-  
-    cout << endl<< "Médias por Disciplina"<<endl;
+    cout << "MÉDIAS GERAIS POR DISCIPLINA"<<endl;
     for (int j = 0; j < totaldisci; j++) {
-        cout << nomedisciplinas[j] << " (" << codigodisciplinas[j] << ") - Média: ";
+        cout << nomedisciplinas[j] << " (" << codigodisciplinas[j] << "): ";
         if (contNotasDisciplina[j] > 0)
-            cout << mediasDisciplinas[j] / contNotasDisciplina[j] << endl;
+            cout << somaNotasDisciplina[j] / contNotasDisciplina[j] << endl;
         else
-            cout << " Sem notas"<<endl;
+            cout << "Sem notas lançadas" << endl;
     }
 }
 
