@@ -72,10 +72,64 @@ void cadastrarDisciplina() {
     cout << "Disciplina cadastrada com sucesso!" << endl;
 }
 
+
+void lancarNota() {
+    string matricula, codigoDisciplina;
+    float nota;
+
+    cout << "Digite a matrícula do aluno: ";
+    cin >> matricula;
+    cout << "Digite o código da disciplina: ";
+    cin >> codigoDisciplina;
+    cout << "Digite a nota: ";
+    cin >> nota;
+
+    int indiceAluno = -1;
+    for (int i = 0; i < totalAlunos; i++) {
+        if (matriculas[i] == matricula) {
+            indiceAluno = i;
+            break;
+        }
+    }
+
+    if (indiceAluno == -1) {
+        cout << "Aluno não encontrado." << endl;
+        return;
+    }
+
+    int indiceDisciplina = -1;
+    for (int j = 0; j < totaldisci; j++) {
+        if (codigodisciplinas[j] == codigoDisciplina) {
+            indiceDisciplina = j;
+            break;
+        }
+    }
+
+    if (indiceDisciplina == -1) {
+        cout << "Disciplina não encontrada." << endl;
+        return;
+    }
+
+    notas[indiceAluno][indiceDisciplina] = nota;
+
+    ofstream arquivo("notas.txt", ios::app);
+    arquivo << matricula << ";" << codigoDisciplina << ";" << nota << endl;
+    arquivo.close();
+
+    cout << "Nota lançada com sucesso!" << endl;
+}
+
+
+
+ 
+
 void menu() {
+
+
     carregarAlunos();
     carregarDisciplinas();
 
+    
     int opcao;
     do {
         cout << "MENU" << endl;
