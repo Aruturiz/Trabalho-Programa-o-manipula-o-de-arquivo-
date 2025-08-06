@@ -5,19 +5,19 @@
 
 using namespace std;
 
-const int alunosmaximo = 100;
-const int disciplinasmaximo = 10;
+const int alunosmaximo= 100;
+const int disciplinasmaximo= 10;
 
 string nomealunos[alunosmaximo];
 string matriculas[alunosmaximo];
 string turmas[alunosmaximo];
-int totalAlunos = 0;
+int totalAlunos= 0;
 
 string nomedisciplinas[disciplinasmaximo];
 string codigodisciplinas[disciplinasmaximo];
-int totaldisci = 0;
+int totaldisci= 0;
 
-float notas[alunosmaximo][disciplinasmaximo] = {0};
+float notas[alunosmaximo][disciplinasmaximo]= {0};
 
 void carregarAlunos() {
     ifstream arquivo("alunos.txt");
@@ -72,6 +72,53 @@ void cadastrarDisciplina() {
 
     cout << "Disciplina cadastrada com sucesso!" << endl;
 }
+
+void lancarNota() {
+    string matricula, codigoDisciplina;
+    float nota;
+
+    cout << "Digite a matrícula do aluno: ";
+    cin >> matricula;
+    cout << "Digite o código da disciplina: ";
+    cin >> codigoDisciplina;
+    cout << "Digite a nota: ";
+    cin >> nota;
+
+    int indiceAluno = -1;
+    for (int i = 0; i < totalAlunos; i++) {
+        if (matriculas[i] == matricula) {
+            indiceAluno = i;
+            break;
+        }
+    }
+
+    if (indiceAluno == -1) {
+        cout << "Aluno não encontrado." << endl;
+        return;
+    }
+
+    int indiceDisciplina = -1;
+    for (int j = 0; j < totaldisci; j++) {
+        if (codigodisciplinas[j] == codigoDisciplina) {
+            indiceDisciplina = j;
+            break;
+        }
+    }
+
+    if (indiceDisciplina == -1) {
+        cout << "Disciplina não encontrada." << endl;
+        return;
+    }
+
+    notas[indiceAluno][indiceDisciplina] = nota;
+
+    ofstream arquivo("notas.txt", ios::app);
+    arquivo << matricula << ";" << codigoDisciplina << ";" << nota << endl;
+    arquivo.close();
+
+    cout << "Nota lançada com sucesso!" << endl;
+}
+
 
 void consultarNotasAluno() {
     string matricula;
@@ -139,7 +186,7 @@ void consultarNotasPorDisciplina() {
 
 void gerarRelatorio() {
     cout << fixed << setprecision(2);
-    cout << "\n=== RELATÓRIO GERAL DE NOTAS ===\n";
+    cout << "RELATÓRIO GERAL DE NOTAS"<<endl;
 
     float mediasAlunos[alunosmaximo] = {0};
     float mediasDisciplinas[disciplinasmaximo] = {0};
@@ -175,38 +222,38 @@ void gerarRelatorio() {
     arquivo.close();
 
     
-    cout << "\n--- Médias por Aluno ---\n";
+    cout << "Médias por Aluno";
     for (int i = 0; i < totalAlunos; i++) {
         cout << nomealunos[i] << " (" << matriculas[i] << ") - Média: ";
         if (contNotasAluno[i] > 0)
             cout << mediasAlunos[i] / contNotasAluno[i] << endl;
         else
-            cout << "Sem notas\n";
+            cout << "Sem notas" << endl;
     }
 
   
-    cout << "\n--- Médias por Disciplina ---\n";
+    cout << endl<< "Médias por Disciplina"<<endl;
     for (int j = 0; j < totaldisci; j++) {
         cout << nomedisciplinas[j] << " (" << codigodisciplinas[j] << ") - Média: ";
         if (contNotasDisciplina[j] > 0)
             cout << mediasDisciplinas[j] / contNotasDisciplina[j] << endl;
         else
-            cout << " Sem notas\n";
+            cout << " Sem notas"<<endl;
     }
 }
 
 
 void consultarNotas() {
     int escolha;
-    cout << "\n1. Notas de um aluno específico\n";
-    cout << "2. Notas de todos   os alnos em uma disciplina\n";
+    cout << "1. Notas de um aluno específico"<<endl;
+    cout << "2. Notas de todos os alunos em uma disciplina"<<endl;
     cout << "Escolha: ";
     cin >> escolha;
 
     switch (escolha) {
         case 1: consultarNotasAluno();  break;
         case 2: consultarNotasPorDisciplina(); break;
-        default: cout << "Opção inválida.\n"; break;
+        default: cout << "Opção inválida."<<endl; break;
     }
 }
 
@@ -217,13 +264,13 @@ void menu() {
     int opcao;
     do {
         cout << "MENU" << endl;
-        cout << "1. Cadastrar Aluno\n";
-        cout << "2. Cadastrar Disciplina\n";
-        cout << "3. Lançar Nota\n";
-        cout << "4 Consultar Notas do Aluno\n";
-        cout << "5 Outras Consultas de Notas\n";
-        cout << "6. Relatórios Gerais\n";
-        cout << "0. Sair\n";
+        cout << "1. Cadastrar Aluno"<<endl;
+        cout << "2. Cadastrar Disciplina"<<endl;
+        cout << "3. Lançar Nota"<<endl;
+        cout << "4. Consultar Notas do Aluno"<<endl;
+        cout << "5. Outras Consultas de Notas"<<endl;
+        cout << "6. Relatórios Gerais"<<endl;
+        cout << "0. Sair"<<endl;
         cout << "Escolha uma opção: ";
         cin >> opcao;
 
@@ -234,8 +281,8 @@ void menu() {
             case 4: consultarNotasAluno(); break;
             case 5: consultarNotas(); break;
             case 6: gerarRelatorio(); break;
-            case 0: cout << "Encerrando...\n"; break;
-            default: cout << "Opção inválida!\n"; break;
+            case 0: cout << "Encerrado."<<endl; break;
+            default: cout << "Opção inválida"<<endl; break;
         }
     } while (opcao != 0);
 }
