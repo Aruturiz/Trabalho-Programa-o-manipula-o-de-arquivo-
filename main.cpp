@@ -104,7 +104,6 @@ void consultarNotasAluno() {
     arquivo.close();
 }
 
-//Notas de todos os alunos em uma disciplina específica
 void consultarNotasPorDisciplina() {
     string codigo;
     cout << "Digite o código da disciplina: ";
@@ -136,6 +135,81 @@ void consultarNotasPorDisciplina() {
     arquivo.close();
 }
 
+
+
+void gerarRelatorio() {
+    cout << fixed << setprecision(2);
+    cout << "\n=== RELATÓRIO GERAL DE NOTAS ===\n";
+
+    float mediasAlunos[alunosmaximo] = {0};
+    float mediasDisciplinas[disciplinasmaximo] = {0};
+    int contNotasAluno[alunosmaximo] = {0};
+    int contNotasDisciplina[disciplinasmaximo] = {0};
+
+    ifstream arquivo("notas.txt");
+    string linha, mat, cod;
+    float nota;
+
+    while (getline(arquivo, linha)) {
+        size_t pos1 = linha.find(';');
+        size_t pos2 = linha.rfind(';');
+
+        mat = linha.substr(0, pos1);
+        cod = linha.substr(pos1 + 1, pos2 - pos1 - 1);
+        nota = stof(linha.substr(pos2 + 1));
+
+        int ia = -1, id = -1;
+        for (int i = 0; i < totalAlunos; i++)
+            if (matriculas[i] == mat) ia = i;
+        for (int j = 0; j < totaldisci; j++)
+            if (codigodisciplinas[j] == cod) id = j;
+
+        if (ia != -1 && id != -1) {
+            notas[ia][id] = nota;
+            mediasAlunos[ia] += nota;
+            contNotasAluno[ia]++;
+            mediasDisciplinas[id] += nota;
+            contNotasDisciplina[id]++;
+        }
+    }
+    arquivo.close();
+
+    
+    cout << "\n--- Médias por Aluno ---\n";
+    for (int i = 0; i < totalAlunos; i++) {
+        cout << nomealunos[i] << " (" << matriculas[i] << ") - Média: ";
+        if (contNotasAluno[i] > 0)
+            cout << mediasAlunos[i] / contNotasAluno[i] << endl;
+        else
+            cout << "Sem notas\n";
+    }
+
+  
+    cout << "\n--- Médias por Disciplina ---\n";
+    for (int j = 0; j < totaldisci; j++) {
+        cout << nomedisciplinas[j] << " (" << codigodisciplinas[j] << ") - Média: ";
+        if (contNotasDisciplina[j] > 0)
+            cout << mediasDisciplinas[j] / contNotasDisciplina[j] << endl;
+        else
+            cout << " Sem notas\n";
+    }
+}
+
+
+void consultarNotas() {
+    int escolha;
+    cout << "\n1. Notas de um aluno específico\n";
+    cout << "2. Notas de todos   os alnos em uma disciplina\n";
+    cout << "Escolha: ";
+    cin >> escolha;
+
+    switch (escolha) {
+        case 1: consultarNotasAluno();  break;
+        case 2: consultarNotasPorDisciplina(); break;
+        default: cout << "Opção inválida.\n"; break;
+    }
+}
+
 void menu() {
     carregarAlunos();
     carregarDisciplinas();
@@ -146,8 +220,8 @@ void menu() {
         cout << "1. Cadastrar Aluno\n";
         cout << "2. Cadastrar Disciplina\n";
         cout << "3. Lançar Nota\n";
-        cout << "4. Consultar Notas do Aluno\n";
-        cout << "5. Outras Consultas de Notas\n";
+        cout << "4 Consultar Notas do Aluno\n";
+        cout << "5 Outras Consultas de Notas\n";
         cout << "6. Relatórios Gerais\n";
         cout << "0. Sair\n";
         cout << "Escolha uma opção: ";
