@@ -181,7 +181,6 @@ void consultarNotasPorDisciplina() {
 }
 
 
-
 void gerarRelatorio() {
     cout << fixed << setprecision(2);
     cout << "RELATÓRIO DE MÉDIAS\n" << endl;
@@ -189,7 +188,7 @@ void gerarRelatorio() {
     for (int i = 0; i < alunosmaximo; i++)
         for (int j = 0; j < disciplinasmaximo; j++)
             notas[i][j] = 0;
-
+a
     float somaNotasDisciplina[disciplinasmaximo] = {0};
     int contNotasDisciplina[disciplinasmaximo] = {0};
 
@@ -221,17 +220,32 @@ void gerarRelatorio() {
 
     for (int i = 0; i < totalAlunos; i++) {
         cout << "Aluno: " << nomealunos[i] << " (" << matriculas[i] << ")" << endl;
+
+        float somaNotasAluno = 0;
+        int contNotasAluno = 0;
+
         for (int j = 0; j < totaldisci; j++) {
             cout << " - " << nomedisciplinas[j] << " (" << codigodisciplinas[j] << "): ";
-            if (notas[i][j] > 0)
+            if (notas[i][j] > 0) {
                 cout << notas[i][j] << endl;
-            else
+                somaNotasAluno += notas[i][j];  
+                contNotasAluno++;
+            } else {
                 cout << "Sem nota" << endl;
+            }
         }
+
+        if (contNotasAluno > 0) {
+            float mediaGeral = somaNotasAluno / contNotasAluno;
+            cout << "Média geral do aluno: " << mediaGeral << endl;
+        } else {
+            cout << "Média geral do aluno: Sem notas lançadas" << endl;
+        }
+
         cout << endl;
     }
 
-    cout << "MÉDIAS GERAIS POR DISCIPLINA"<<endl;
+    cout << "MÉDIAS GERAIS POR DISCIPLINA" << endl;
     for (int j = 0; j < totaldisci; j++) {
         cout << nomedisciplinas[j] << " (" << codigodisciplinas[j] << "): ";
         if (contNotasDisciplina[j] > 0)
