@@ -47,6 +47,7 @@ void cadastrarAluno() {
 
     cout << "Aluno cadastrado com sucesso!" << endl;
 }
+
 void carregarDisciplinas() {
     ifstream arquivo("disciplinas.txt");
     totaldisci = 0;
@@ -72,64 +73,73 @@ void cadastrarDisciplina() {
     cout << "Disciplina cadastrada com sucesso!" << endl;
 }
 
-
-void lancarNota() {
-    string matricula, codigoDisciplina;
-    float nota;
-
+void consultarNotasAluno() {
+    string matricula;
     cout << "Digite a matrícula do aluno: ";
     cin >> matricula;
-    cout << "Digite o código da disciplina: ";
-    cin >> codigoDisciplina;
-    cout << "Digite a nota: ";
-    cin >> nota;
 
-    int indiceAluno = -1;
-    for (int i = 0; i < totalAlunos; i++) {
-        if (matriculas[i] == matricula) {
-            indiceAluno = i;
-            break;
+    ifstream arquivo("notas.txt");
+    string linha, mat, cod;
+    float nota;
+    bool encontrou = false;
+
+    while (getline(arquivo, linha)) {
+        size_t pos1 = linha.find(';');
+        size_t pos2 = linha.rfind(';');
+
+        mat = linha.substr(0, pos1);
+        cod = linha.substr(pos1 + 1, pos2 - pos1 - 1);
+        nota = stof(linha.substr(pos2 + 1));
+
+        if (mat == matricula) {
+            encontrou = true;
+            cout << "Disciplina " << cod << " - Nota: " << nota << endl;
         }
     }
 
-    if (indiceAluno == -1) {
-        cout << "Aluno não encontrado." << endl;
-        return;
+    if (!encontrou) {
+        cout << "Nenhuma nota encontrada para a matrícula." << endl;
     }
 
-    int indiceDisciplina = -1;
-    for (int j = 0; j < totaldisci; j++) {
-        if (codigodisciplinas[j] == codigoDisciplina) {
-            indiceDisciplina = j;
-            break;
-        }
-    }
-
-    if (indiceDisciplina == -1) {
-        cout << "Disciplina não encontrada." << endl;
-        return;
-    }
-
-    notas[indiceAluno][indiceDisciplina] = nota;
-
-    ofstream arquivo("notas.txt", ios::app);
-    arquivo << matricula << ";" << codigoDisciplina << ";" << nota << endl;
     arquivo.close();
-
-    cout << "Nota lançada com sucesso!" << endl;
 }
 
+//Notas de todos os alunos em uma disciplina específica
+void consultarNotasPorDisciplina() {
+    string codigo;
+    cout << "Digite o código da disciplina: ";
+    cin >> codigo;
 
+    ifstream arquivo("notas.txt");
+    string linha, mat, cod;
+    float nota;
+    bool encontrou = false;
 
- 
+    while (getline(arquivo, linha)) {
+        size_t pos1 = linha.find(';');
+        size_t pos2 = linha.rfind(';');
+
+        mat = linha.substr(0, pos1);
+        cod = linha.substr(pos1 + 1, pos2 - pos1 - 1);
+        nota = stof(linha.substr(pos2 + 1));
+
+        if (cod == codigo) {
+            encontrou = true;
+            cout << "Aluno " << mat << " - Nota: " << nota << endl;
+        }
+    }
+
+    if (!encontrou) {
+        cout << "Nenhuma nota encontrada para essa disciplina." << endl;
+    }
+
+    arquivo.close();
+}
 
 void menu() {
-
-
     carregarAlunos();
     carregarDisciplinas();
 
-    
     int opcao;
     do {
         cout << "MENU" << endl;
